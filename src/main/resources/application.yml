@@ -8,6 +8,11 @@ spring:
         - Path=/msvc/products/**
         filters:
         - StripPrefix=2
+        - name: Sample
+          args:
+            name: user
+            value: Cesar
+            message: mensaje personalizado para productos
       - id: msvc-items
         uri: lb://msvc-items
         predicates:
