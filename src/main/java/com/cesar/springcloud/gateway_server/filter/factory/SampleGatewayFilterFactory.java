@@ -1,10 +1,13 @@
 package com.cesar.springcloud.gateway_server.filter.factory;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.OrderedGatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
@@ -24,7 +27,7 @@ public class SampleGatewayFilterFactory
     @Override
     public GatewayFilter apply(ConfigurationCookie config) {
 
-        return (exchange, chain) -> {
+        return new OrderedGatewayFilter((exchange, chain) -> {
 
             logger.info("[PRE] Ejecutando filtro GW antes del request: " + config.message);
 
@@ -37,7 +40,7 @@ public class SampleGatewayFilterFactory
 
             }));
 
-        };
+        }, 100);
 
     }
 
@@ -71,6 +74,16 @@ public class SampleGatewayFilterFactory
             this.message = message;
         }
 
+    }
+
+    @Override
+    public List<String> shortcutFieldOrder() {
+        return Arrays.asList("message", "value", "name");
+    }
+
+    @Override
+    public String name() {
+        return "FiltroEjemplo";
     }
 
 }

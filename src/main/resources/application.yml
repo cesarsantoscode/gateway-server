@@ -6,16 +6,21 @@ spring:
         uri: lb://msvc-products
         predicates:
         - Path=/msvc/products/**
+        - Header=token,\d+
+        - Method=GET,POST
+        - Query=color,verde
+        - Cookie=color,azul
+        - Header=Content-Type,application/json
         filters:
         - StripPrefix=2
-        - name: Sample
-          args:
-            name: user
-            value: Cesar
-            message: mensaje personalizado para productos
+        - FiltroEjemplo=mensaje personalizado para productos,Enrique,user
       - id: msvc-items
         uri: lb://msvc-items
         predicates:
         - Path=/msvc/items/**
         filters:
         - StripPrefix=2
+        - AddRequestHeader=token-request,123request456
+        - AddResponseHeader=token-response,123response456
+        - AddRequestParameter=name,Cesar
+        - SetResponseHeader=Content-Type,text/plain
